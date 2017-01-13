@@ -1,8 +1,8 @@
-#coding=utf-8
+# -*- coding: utf-8 -*-
 import sys
 import tkinter as tk
 from tkinter import ttk
-import time , json , os
+import time , json , os , csv
 
 #print(sys.getdefaultencoding())
 
@@ -13,8 +13,15 @@ def Enter(*args):
     elif "," in sender.get()+receiver.get()+date.get()+content.get() :
         text = "資料內容不可含有英式鍵盤的逗號「,」，請更正後再按儲存!"
     else :
-        f = open('record.br', 'a+', encoding='utf8')
-        f.write(",".join([sender.get(),receiver.get(),date.get(),content.get()]) + "\n")
+        # 使用 csv writer 時須注意以下
+        # newlines embedded inside quoted fields will not be interpreted correctly,
+        # and on platforms that use \r\n linendings on write an extra \r will be added.
+        # It should always be safe to specify newline='' in open(),
+        # since the csv module does its own (universal) newline handling.
+        f = open('record.br', 'a+', encoding='utf8', newline='')
+        datalist = [sender.get(),receiver.get(),date.get(),content.get()]
+        csv.writer(f).writerow(datalist)
+        #f.write(",".join([sender.get(),receiver.get(),date.get(),content.get()]) + "\n")
         f.close()
         text = "儲存成功!!\n" + sender.get() + "\n" + receiver.get() + "\n" + date.get() + "\n" + content.get() + "\n"
         if boolean1.get() or boolean2.get() or boolean4.get() :
@@ -117,7 +124,6 @@ ttk.Label(mainframe, text="meters").grid(column=3, row=2, sticky=tk.W)
 
 # 將游標關注設定在輸入欄位
 feet_entry.focus()
-
 """
 # 綁定 Enter 鍵為執行函數
 root.bind('<Return>', Enter)
