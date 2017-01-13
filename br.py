@@ -1,6 +1,10 @@
+#coding=utf-8
+import sys
 import tkinter as tk
 from tkinter import ttk
 import time , json , os
+
+#print(sys.getdefaultencoding())
 
 # 定義一個計算用的函數
 def Enter(*args):
@@ -27,9 +31,10 @@ def Enter(*args):
                 defalt[4] = content.get()
                 text += content.get() + " 已成為預設值\n"
             f = open('defalt.br', 'w', encoding='utf8')
-            json.dump(defalt,f)
+            json.dump(defalt,f,ensure_ascii=False)
             f.close()
     message.set(text)
+    content.set('')
 
 
 # 創建視窗
@@ -112,10 +117,10 @@ ttk.Label(mainframe, text="meters").grid(column=3, row=2, sticky=tk.W)
 
 # 將游標關注設定在輸入欄位
 feet_entry.focus()
-# 綁定 Enter 鍵為執行計算函數
-root.bind('<Return>', calculate)
-"""
 
+"""
+# 綁定 Enter 鍵為執行函數
+root.bind('<Return>', Enter)
 # 將每一個 grid 內的欄位格都設定 padding
 for child in mainframe.winfo_children(): child.grid_configure(padx=10, pady=5)
 
